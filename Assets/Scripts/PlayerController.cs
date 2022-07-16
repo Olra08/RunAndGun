@@ -15,7 +15,7 @@ public class PlayerController : MonoBehaviour
 	[SerializeField] private Collider2D m_CrouchDisableCollider;                // A collider that will be disabled when crouching
 
 	const float k_GroundedRadius = .2f; // Radius of the overlap circle to determine if grounded
-	private bool m_Grounded;            // Whether or not the player is grounded.
+	public bool m_Grounded;            // Whether or not the player is grounded.
 	const float k_CeilingRadius = .2f; // Radius of the overlap circle to determine if the player can stand up
 	private Rigidbody2D m_Rigidbody2D;
 	private bool m_FacingRight = true;  // For determining which way the player is currently facing.
@@ -66,14 +66,14 @@ public class PlayerController : MonoBehaviour
 	public void Move(float move, bool crouch, bool jump)
 	{
 		// If crouching, check to see if the character can stand up
-		if (!crouch)
+		/*if (!crouch)
 		{
 			// If the character has a ceiling preventing them from standing up, keep them crouching
 			if (Physics2D.OverlapCircle(m_CeilingCheck.position, k_CeilingRadius, m_WhatIsGround))
 			{
 				crouch = true;
 			}
-		}
+		}*/
 
 		//only control the player if grounded or airControl is turned on
 		if (m_Grounded || m_AirControl)
@@ -125,6 +125,18 @@ public class PlayerController : MonoBehaviour
 				// ... flip the player.
 				Flip();
 			}
+
+			if (move == 0 && !m_FacingRight && Input.GetAxisRaw("Horizontal") == 1)
+			{
+				// ... flip the player.
+				Flip();
+			}
+			if (move == 0 && m_FacingRight && Input.GetAxisRaw("Horizontal") == -1)
+			{
+				// ... flip the player.
+				Flip();
+			}
+
 		}
 		// If the player should jump...
 		if (m_Grounded && jump)
