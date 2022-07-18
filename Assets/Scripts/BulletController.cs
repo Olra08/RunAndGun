@@ -17,16 +17,6 @@ public class BulletController : MonoBehaviour
     private Vector3 mDirection4;
     private Vector3 mDirection5;
 
-    /*
-     * si el prefab se llama Spread
-     * 
-     * id 0 = mdirection.y += 1
-     * id 1 = mdirection.y += 0.5
-     * id 2 = mdirection
-     * id 3 = mdirection.y -= 0.5
-     * id 4 = mdirection.y -= 1
-    */
-
     private void Start()
     {
         mDirection = GameManager.GetInstance().movement.GetDirection();
@@ -74,15 +64,10 @@ public class BulletController : MonoBehaviour
         if (spread1 != null)
         {
             spread1.transform.position += speed * Time.deltaTime * mDirection1;
-            //Debug.Log("spread 1: " + mDirection1);
             spread2.transform.position += speed * Time.deltaTime * mDirection2;
-            //Debug.Log("spread 2: " + mDirection2);
             spread3.transform.position += speed * Time.deltaTime * mDirection;
-            //Debug.Log("spread 3: " + mDirection);
             spread4.transform.position += speed * Time.deltaTime * mDirection4;
-            //Debug.Log("spread 4: " + mDirection4);
             spread5.transform.position += speed * Time.deltaTime * mDirection5;
-            //Debug.Log("spread 5: " + mDirection5);
         }
         else
         {

@@ -23,7 +23,9 @@ public class PlayerController : MonoBehaviour
 	
 	public GameObject bullet;
 	private Transform mGunPointer;
-
+	private float cooldown = 0f;
+	private float firstShoot = 0f;
+	private AudioSource mAudioSource;
 
 	[Header("Events")]
 	[Space]
@@ -50,13 +52,32 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
 		mGunPointer = transform.Find("GunPointer");
+		mAudioSource = GetComponent<AudioSource>();
 	}
 
     private void Update()
     {
-		if (Input.GetButtonDown("Fire1"))
-		{
-			Fire();
+		if (bullet.name != "Default")
+        {
+			if (Input.GetButton("Fire1"))
+			{
+				cooldown -= Time.deltaTime;
+				if (cooldown <= 0f)
+				{
+					Fire();
+				}
+			}
+			if (Input.GetButtonUp("Fire1"))
+            {
+				cooldown = 0f;
+            }
+        }
+        else
+        {
+			if (Input.GetButtonDown("Fire1"))
+			{
+				Fire();
+			}
 		}
 	}
 
@@ -165,8 +186,36 @@ public class PlayerController : MonoBehaviour
 
 	private void Fire()
 	{
-		GameObject obj = Instantiate(bullet, mGunPointer);
-		obj.transform.parent = null;
+		if (bullet.name == "Spread")
+        {
+			mAudioSource.clip = Resources.Load<AudioClip>("spread");
+			mAudioSource.Play();
+			GameObject obj = Instantiate(bullet, mGunPointer);
+			obj.transform.parent = null;
+			cooldown = 0.20f;
+			firstShoot = cooldown;
+		} else if (bullet.name == "MachineGun")
+        {
+			mAudioSource.clip = Resources.Load<AudioClip>("default");
+			mAudioSource.Play();
+			GameObject obj = Instantiate(bullet, mGunPointer);
+			obj.transform.parent = null;
+			cooldown = 0.05f;
+			firstShoot = cooldown;
+        } else if (bullet.name == "Laser")
+        {
+			GameObject obj = Instantiate(bullet, mGunPointer);
+			obj.transform.parent = null;
+			cooldown = 0.80f;
+			firstShoot = cooldown;
+		}
+        else
+        {
+			mAudioSource.clip = Resources.Load<AudioClip>("default");
+			mAudioSource.Play();
+			GameObject obj = Instantiate(bullet, mGunPointer);
+			obj.transform.parent = null;
+		}
 	}
 
 	private void Flip()
