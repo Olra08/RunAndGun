@@ -20,6 +20,10 @@ public class PlayerController : MonoBehaviour
 	private Rigidbody2D m_Rigidbody2D;
 	private bool m_FacingRight = true;  // For determining which way the player is currently facing.
 	private Vector3 m_Velocity = Vector3.zero;
+	
+	public GameObject bullet;
+	private Transform mGunPointer;
+
 
 	[Header("Events")]
 	[Space]
@@ -43,7 +47,20 @@ public class PlayerController : MonoBehaviour
 			OnCrouchEvent = new BoolEvent();
 	}
 
-	private void FixedUpdate()
+    private void Start()
+    {
+		mGunPointer = transform.Find("GunPointer");
+	}
+
+    private void Update()
+    {
+		if (Input.GetButtonDown("Fire1"))
+		{
+			Fire();
+		}
+	}
+
+    private void FixedUpdate()
 	{
 		bool wasGrounded = m_Grounded;
 		m_Grounded = false;
@@ -61,7 +78,6 @@ public class PlayerController : MonoBehaviour
 			}
 		}
 	}
-
 
 	public void Move(float move, bool crouch, bool jump)
 	{
@@ -147,6 +163,11 @@ public class PlayerController : MonoBehaviour
 		}
 	}
 
+	private void Fire()
+	{
+		GameObject obj = Instantiate(bullet, mGunPointer);
+		obj.transform.parent = null;
+	}
 
 	private void Flip()
 	{
@@ -155,7 +176,7 @@ public class PlayerController : MonoBehaviour
 
 		// Multiply the player's x local scale by -1.
 		Vector3 theScale = transform.localScale;
-		theScale.x *= -1;
+		theScale.x *= -1;;
 		transform.localScale = theScale;
 	}
 }
