@@ -1,3 +1,4 @@
+using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -24,7 +25,6 @@ public class PlayerController : MonoBehaviour
 	public GameObject bullet;
 	private Transform mGunPointer;
 	private float cooldown = 0f;
-	private float firstShoot = 0f;
 	private AudioSource mAudioSource;
 
 	[Header("Events")]
@@ -71,7 +71,7 @@ public class PlayerController : MonoBehaviour
             {
 				cooldown = 0f;
             }
-        }
+		}
         else
         {
 			if (Input.GetButtonDown("Fire1"))
@@ -193,21 +193,18 @@ public class PlayerController : MonoBehaviour
 			GameObject obj = Instantiate(bullet, mGunPointer);
 			obj.transform.parent = null;
 			cooldown = 0.20f;
-			firstShoot = cooldown;
 		} else if (bullet.name == "MachineGun")
         {
 			mAudioSource.clip = Resources.Load<AudioClip>("default");
 			mAudioSource.Play();
 			GameObject obj = Instantiate(bullet, mGunPointer);
 			obj.transform.parent = null;
-			cooldown = 0.05f;
-			firstShoot = cooldown;
+			cooldown = 0.1f;
         } else if (bullet.name == "Laser")
         {
 			GameObject obj = Instantiate(bullet, mGunPointer);
 			obj.transform.parent = null;
 			cooldown = 0.80f;
-			firstShoot = cooldown;
 		}
         else
         {
@@ -225,7 +222,14 @@ public class PlayerController : MonoBehaviour
 
 		// Multiply the player's x local scale by -1.
 		Vector3 theScale = transform.localScale;
-		theScale.x *= -1;;
+		theScale.x *= -1;
 		transform.localScale = theScale;
 	}
+
+	/*
+	public void SetCooldown(float cd)
+    {
+		cooldown = cd;
+    }
+	*/
 }

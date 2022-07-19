@@ -4,6 +4,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     private static GameManager mInstance;
+    public AudioSource mGameMusic;
 
     public static GameManager GetInstance()
     {
@@ -16,9 +17,12 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         mInstance = this;
+        mGameMusic = GetComponent<AudioSource>();
     }
+
     private void Start()
     {
-
+        mGameMusic.clip = Resources.Load<AudioClip>("StageNormal");
+        mGameMusic.Play();
     }
 }

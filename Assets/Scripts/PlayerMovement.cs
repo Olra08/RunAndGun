@@ -1,3 +1,4 @@
+using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,7 +8,6 @@ public class PlayerMovement : MonoBehaviour
 	public PlayerController controller;
 	public Animator animator;
 	public Rigidbody2D mRigidbody;
-	private Transform transformGunPointer;
 	private Vector3 mVector3 = new Vector3(1f, 0f, 0f);
 
 	public float runSpeed = 40f;
@@ -17,10 +17,14 @@ public class PlayerMovement : MonoBehaviour
 	bool crouch = false;
 	bool isDead = false;
 
-    private void Start()
-    {
-		transformGunPointer = transform.Find("GunPointer");
+	public GameObject boss;
+	public CinemachineVirtualCamera cinemachine;
+	private CinemachineImpulseSource impulse;
+	public AudioSource mGameMusic;
 
+	private void Start()
+    {
+		impulse = transform.GetComponent<CinemachineImpulseSource>();
 	}
 
     void Update()
@@ -164,7 +168,6 @@ public class PlayerMovement : MonoBehaviour
 	public void OnLanding()
     {
 		animator.SetBool("IsJumping", false);
-		Debug.Log("pise el suelo");
 	}
 
 	public void OnCrouching(bool isCrouching)
@@ -273,9 +276,43 @@ public class PlayerMovement : MonoBehaviour
 			horizontalMove = 0f;
 			isDead = true;
 		}
+
+		if (collision.gameObject.CompareTag("ScreenChange"))
+        {
+			StartCoroutine(FadeAudioSource.StartFade(mGameMusic, 5f, 0f));
+			StartCoroutine(BossEntrance());
+			cinemachine.Priority += 1;
+			Invoke(nameof(Shake), 5f);
+        }
 	}
-	
-	/*private void OnCollisionEnter2D(Collision2D collision)
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+		if (collision.gameObject.CompareTag("LockL"))
+		{
+			transform.position = new Vector3(transform.position.x + 0.2f, transform.position.y);
+		}
+		if (collision.gameObject.CompareTag("LockR"))
+		{
+			transform.position = new Vector3(transform.position.x - 0.2f, transform.position.y);
+		}
+	}
+
+	IEnumerator BossEntrance()
+	{
+		yield return new WaitForSeconds(10);
+		StartCoroutine(FadeAudioSource.StartFade(mGameMusic, 0.01f, 1f));
+		mGameMusic.clip = Resources.Load<AudioClip>("Boss");
+		mGameMusic.Play();
+		boss.SetActive(true);
+	}
+
+	private void Shake()
+    {
+		impulse.GenerateImpulse(5f);
+    }
+
+    /*private void OnCollisionEnter2D(Collision2D collision)
     {
 		if (collision.gameObject.CompareTag("Hit"))
 		{

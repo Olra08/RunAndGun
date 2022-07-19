@@ -7,6 +7,10 @@ TagManager:
   - Floor
   - Hit
   - Bullet
+  - Platform
+  - LockR
+  - LockL
+  - ScreenChange
   layers:
   - Default
   - TransparentFX
@@ -44,9 +48,9 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: Player
-    uniqueID: 3937953187
-    locked: 0
   - name: Platform
     uniqueID: 3584102831
+    locked: 0
+  - name: Player
+    uniqueID: 3937953187
     locked: 0

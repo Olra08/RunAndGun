@@ -55,7 +55,6 @@ public class BulletController : MonoBehaviour
                 mDirection5 = mDirection + new Vector3(0f, -0.30f, 0f);
                 Debug.Log("horizontal");
             }
-            
         }
     }
 
@@ -78,6 +77,12 @@ public class BulletController : MonoBehaviour
         if (mTimer > timeToDestroy)
         {
             // mTimer = 0f;
+            /*
+            if (Input.GetButtonUp("Fire1"))
+            {
+                GameManager.GetInstance().player.SetCooldown(0f);
+            }
+            */
             Destroy(gameObject);
         }
     }
@@ -85,6 +90,14 @@ public class BulletController : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (!collision.gameObject.CompareTag("Player"))
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Hit"))
         {
             Destroy(gameObject);
         }
