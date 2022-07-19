@@ -9,13 +9,22 @@ public class EnemyController : MonoBehaviour
     public float gravity;
 
     private Rigidbody2D mRigidbody;
-    public PlayerController playerController;
-    public Transform playerTransform;
+    public Animator animator;
+    public float raycastDistance = 0.3f;
+    private PlayerController playerController;
+    private Transform playerTransform;
     public GameObject explosion;
+    private bool isRight = true;
+    private bool isLeft = true;
+    private bool walkR = false;
+    private bool walkL = false;
 
     private void Start()
     {
         mRigidbody = GetComponent<Rigidbody2D>();
+        playerController = GameManager.GetInstance().player;
+        playerTransform = GameManager.GetInstance().player.transform;
+
     }
     private void Update()
     {
@@ -39,19 +48,24 @@ public class EnemyController : MonoBehaviour
 
     private void ChasePlayer()
     {
-        if (transform.position.x < playerTransform.position.x)
+        if (transform.position.x < playerTransform.position.x && isRight || walkR)
+        {
+            mRigidbody.velocity = new Vector2(speed, gravity);
+            transform.rotation = Quaternion.Euler(0f, 180f, 0f);
+            isLeft = false;
+            walkR = true;
+        } else if (transform.position.x > playerTransform.position.x && isLeft || walkL)
         {
             mRigidbody.velocity = new Vector2(-speed, gravity);
-        }
-        else
-        {
-            mRigidbody.velocity = new Vector2(-speed, gravity);
+            transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+            isRight = false;
+            walkL = true;
         }
     }
 
     private void StopChasingHero()
     {
-        mRigidbody.velocity = new Vector2(0, gravity - 5);
+        mRigidbody.velocity = new Vector2(0, gravity);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -59,7 +73,6 @@ public class EnemyController : MonoBehaviour
         if (collision.gameObject.CompareTag("Bullet"))
         {
             mHealth--;
-
             if (mHealth <= 0)
             {
                 GameObject obj = Instantiate(explosion, transform);
@@ -67,8 +80,29 @@ public class EnemyController : MonoBehaviour
                 Destroy(gameObject);
             }
         }
-
     }
+
+    /*public void IsOnAir()
+    {
+        Transform raycastOrigin = transform.Find("Raycast");
+        RaycastHit2D hit = Physics2D.Raycast(
+            raycastOrigin.position,
+            Vector2.down,
+            raycastDistance
+        );
+        bool onAir = true;
+        if (hit)
+        {
+            Debug.Log("pis¨¦");
+            animator.SetBool("isOnAir", false);
+            onAir = false;
+        }
+        if (!hit && onAir)
+        {
+            animator.SetBool("isOnAir", true);
+        }
+
+    }*/
 
     /*
     private void OnTriggerEnter2D(Collider2D collision)

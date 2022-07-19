@@ -283,7 +283,7 @@ public class PlayerMovement : MonoBehaviour
 			StartCoroutine(BossEntrance());
 			cinemachine.Priority += 1;
 			Invoke(nameof(Shake), 5f);
-        }
+		}
 	}
 
     private void OnTriggerStay2D(Collider2D collision)
@@ -300,17 +300,18 @@ public class PlayerMovement : MonoBehaviour
 
 	IEnumerator BossEntrance()
 	{
-		yield return new WaitForSeconds(10);
-		StartCoroutine(FadeAudioSource.StartFade(mGameMusic, 0.01f, 1f));
-		mGameMusic.clip = Resources.Load<AudioClip>("Boss");
+		yield return new WaitForSeconds(5);
+		StartCoroutine(FadeAudioSource.StartFade(mGameMusic, 1f, 0.8f));
+		mGameMusic.clip = Resources.Load<AudioClip>("Boss&Quake");
 		mGameMusic.Play();
+		yield return new WaitForSeconds(5);
 		boss.SetActive(true);
 	}
 
 	private void Shake()
     {
 		impulse.GenerateImpulse(5f);
-    }
+	}
 
     /*private void OnCollisionEnter2D(Collision2D collision)
     {

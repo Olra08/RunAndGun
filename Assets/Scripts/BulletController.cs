@@ -29,7 +29,7 @@ public class BulletController : MonoBehaviour
                 mDirection2 = mDirection + new Vector3(-0.15f, 0.15f, 0f);
                 mDirection4 = mDirection + new Vector3(0.15f, -0.15f, 0f);
                 mDirection5 = mDirection + new Vector3(0.30f, -0.30f, 0f);
-                Debug.Log("arriba derecha / abajo izquierda");
+                //Debug.Log("arriba derecha / abajo izquierda");
             }
             if (mDirection.x == -mDirection.y || -mDirection.x == mDirection.y)
             {
@@ -37,7 +37,7 @@ public class BulletController : MonoBehaviour
                 mDirection2 = mDirection + new Vector3(0.15f, 0.15f, 0f);
                 mDirection4 = mDirection + new Vector3(-0.15f, -0.15f, 0f);
                 mDirection5 = mDirection + new Vector3(-0.30f, -0.30f, 0f);
-                Debug.Log("diagonal");
+                //Debug.Log("diagonal");
             }
             if (mDirection.x == 0f && mDirection.y != 0f)
             {
@@ -45,7 +45,7 @@ public class BulletController : MonoBehaviour
                 mDirection2 = mDirection + new Vector3(0.15f, 0f, 0f);
                 mDirection4 = mDirection + new Vector3(-0.15f, 0f, 0f);
                 mDirection5 = mDirection + new Vector3(-0.30f, 0f, 0f);
-                Debug.Log("vertical");
+                //Debug.Log("vertical");
             } 
             if (mDirection.x != 0f && mDirection.y == 0f)
             {
@@ -53,7 +53,7 @@ public class BulletController : MonoBehaviour
                 mDirection2 = mDirection + new Vector3(0f, 0.15f, 0f);
                 mDirection4 = mDirection + new Vector3(0f, -0.15f, 0f);
                 mDirection5 = mDirection + new Vector3(0f, -0.30f, 0f);
-                Debug.Log("horizontal");
+                //Debug.Log("horizontal");
             }
         }
     }
