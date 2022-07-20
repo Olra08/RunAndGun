@@ -4,16 +4,50 @@ using UnityEngine;
 
 public class Spawner : MonoBehaviour
 {
-    public GameObject alien;
-    public GameObject bird;
+    public Transform spawn;
+    private Vector3 spawnA;
+    private Vector3 spawnB;
+    private float cooldownA;
+    private float cooldownB;
 
+    /*
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        SpawnEnemies();
+        if (collision.gameObject.CompareTag("CapsuleM"))
+        {
+            Instantiate(alien, spawner);
+            Debug.Log("entra");
+            Debug.Log(spawner.position);
+        }
+    }
+    */
+
+    private void Update()
+    {
+        cooldownA -= Time.deltaTime;
+        if (cooldownA <= 0f)
+        {
+            SpawnAliens();
+        }
+        cooldownB -= Time.deltaTime;
+        if (cooldownB <= 0f)
+        {
+            SpawnBirds();
+        }
     }
 
-    private void SpawnEnemies()
+    private void SpawnAliens()
     {
-        Instantiate(alien, transform);
+        GameObject obj = Instantiate(Resources.Load<GameObject>("Alien"), spawn);
+        obj.transform.parent = null;
+        cooldownA = Random.Range(1f, 2.5f);
     }
+
+    private void SpawnBirds()
+    {
+        GameObject obj = Instantiate(Resources.Load<GameObject>("Bird"), spawn);
+        obj.transform.parent = null;
+        cooldownB = Random.Range(5f, 8f);
+    }
+
 }

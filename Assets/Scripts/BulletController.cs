@@ -91,7 +91,10 @@ public class BulletController : MonoBehaviour
     {
         if (!collision.gameObject.CompareTag("Player"))
         {
-            Destroy(gameObject);
+            if (gameObject.name != "Laser")
+            {
+                Destroy(gameObject);
+            }
         }
     }
 
@@ -99,7 +102,10 @@ public class BulletController : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Hit"))
         {
-            Destroy(gameObject);
+            if (gameObject.name != "Laser")
+            {
+                Destroy(gameObject);
+            }
         }
         if (collision.gameObject.CompareTag("CapsuleM"))
         {

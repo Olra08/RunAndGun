@@ -19,6 +19,12 @@ TagManager:
   - IconS
   - IconL
   - IconB
+  - SpawnM
+  - SpawnS
+  - SpawnL
+  - SpawnB
+  - SpawnBird
+  - Black
   layers:
   - Default
   - TransparentFX

@@ -17,5 +17,39 @@ public class TriggerDeactivate : MonoBehaviour
         {
             mCollider.enabled = false;
         }
+        if (collision.gameObject.CompareTag("LockR"))
+        {
+            if (gameObject.CompareTag("SpawnBird"))
+            {
+                mCollider.enabled = false;
+                GameObject obj = Instantiate(Resources.Load<GameObject>("Bird"), transform);
+                obj.transform.parent = null;
+            }
+
+            if (gameObject.CompareTag("SpawnM"))
+            {
+                mCollider.enabled = false;
+                GameObject obj = Instantiate(Resources.Load<GameObject>("CapsuleM"), transform);
+                obj.transform.parent = null;
+            }
+            if (gameObject.CompareTag("SpawnL"))
+            {
+                mCollider.enabled = false;
+                GameObject obj = Instantiate(Resources.Load<GameObject>("CapsuleL"), transform);
+                obj.transform.parent = null;
+            }
+            if (gameObject.CompareTag("SpawnS"))
+            {
+                mCollider.enabled = false;
+                GameObject obj = Instantiate(Resources.Load<GameObject>("CapsuleS"), transform);
+                obj.transform.parent = null;
+            }
+            if (gameObject.CompareTag("SpawnB"))
+            {
+                mCollider.enabled = false;
+                GameObject obj = Instantiate(Resources.Load<GameObject>("CapsuleB"), transform);
+                obj.transform.parent = null;
+            }
+        }
     }
 }

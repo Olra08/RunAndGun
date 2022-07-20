@@ -10,6 +10,10 @@ public class PlayerMovement : MonoBehaviour
 	public Rigidbody2D mRigidbody;
 	private Vector3 mVector3 = new Vector3(1f, 0f, 0f);
 	private BoxCollider2D mCollider;
+	public Spawner lockL;
+	public Spawner lockR;
+	public Transform blackScreen;
+	public Animator black;
 
 	public float runSpeed = 40f;
 
@@ -17,6 +21,8 @@ public class PlayerMovement : MonoBehaviour
 	bool jump = false;
 	bool crouch = false;
 	bool isDead = false;
+
+	private int Lives = 2;
 
 	public GameObject boss;
 	public CinemachineVirtualCamera cinemachine;
@@ -288,6 +294,8 @@ public class PlayerMovement : MonoBehaviour
 
 		if (collision.gameObject.CompareTag("ScreenChange"))
         {
+			lockL.enabled = false;
+			lockR.enabled = false;
 			StartCoroutine(FadeAudioSource.StartFade(mGameMusic, 5f, 0f));
 			StartCoroutine(BossEntrance());
 			cinemachine.Priority += 1;
@@ -331,11 +339,40 @@ public class PlayerMovement : MonoBehaviour
     {
 		if (collision.gameObject.CompareTag("Hit"))
 		{
-			//mCollider.enabled = false;
-			gameObject.layer = 8;
-			animator.SetBool("IsHit", true);
-			isDead = true;
-			//Destroy(gameObject);
+			if (Lives != 0)
+			{
+				gameObject.layer = 8;
+				animator.SetBool("IsHit", true);
+				isDead = true;
+				StartCoroutine(TimeAfterDying());
+			}
+			if (Lives <= 0)
+            {
+                StartCoroutine(TimeAfterDying());
+                animator.SetBool("IsHit", true);
+				isDead = true;
+				blackScreen.gameObject.SetActive(true);
+				black.SetBool("GameOver", true);
+            }
+		}
+	}
+
+	IEnumerator TimeAfterDying()
+    {
+		if (Lives != 0)
+        {
+			yield return new WaitForSeconds(2);
+			gameObject.transform.position = new Vector3(transform.position.x, transform.position.y + 5);
+			Lives--;
+			animator.SetBool("IsHit", false);
+			isDead = false;
+			//bullet = Resources.Load<GameObject>("Default");
+			yield return new WaitForSeconds(4f);
+			gameObject.layer = 6;
+        }
+        else
+        {
+			yield return new WaitForSeconds(2);
 		}
 	}
 }

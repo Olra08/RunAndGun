@@ -200,11 +200,12 @@ public class PlayerController : MonoBehaviour
 			cooldown = 0.20f;
 		} else if (bullet.name == "MachineGun")
         {
-			mAudioSource.clip = Resources.Load<AudioClip>("default");
-			mAudioSource.Play();
+			//mAudioSource.clip = Resources.Load<AudioClip>("default");
+			//mAudioSource.Play();
+			mAudioSource.PlayOneShot(Resources.Load<AudioClip>("default"));
 			GameObject obj = Instantiate(bullet, mGunPointer);
 			obj.transform.parent = null;
-			cooldown = 0.1f;
+			cooldown = 0.05f;
         } else if (bullet.name == "Laser")
         {
 			mAudioSource.clip = Resources.Load<AudioClip>("laser");
@@ -232,13 +233,6 @@ public class PlayerController : MonoBehaviour
 		theScale.x *= -1;
 		transform.localScale = theScale;
 	}
-
-    /*
-	public void SetCooldown(float cd)
-    {
-		cooldown = cd;
-    }
-	*/
 
     private void OnCollisionEnter2D(Collision2D collision)
     {

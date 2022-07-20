@@ -37,7 +37,7 @@ public class EnemyController : MonoBehaviour
             }
             else
             {
-                StopChasingHero();
+                ChasePlayer();
             }
         }
         if (playerController == null)
