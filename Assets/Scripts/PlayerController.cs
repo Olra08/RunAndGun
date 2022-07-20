@@ -26,6 +26,7 @@ public class PlayerController : MonoBehaviour
 	private Transform mGunPointer;
 	private float cooldown = 0f;
 	private AudioSource mAudioSource;
+	public PlayerMovement movement;
 
 	[Header("Events")]
 	[Space]
@@ -57,26 +58,29 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-		if (bullet.name != "Default")
+		if (!movement.GetDead())
         {
-			if (Input.GetButton("Fire1"))
+			if (bullet.name != "Default")
 			{
-				cooldown -= Time.deltaTime;
-				if (cooldown <= 0f)
+				if (Input.GetButton("Fire1"))
+				{
+					cooldown -= Time.deltaTime;
+					if (cooldown <= 0f)
+					{
+						Fire();
+					}
+				}
+				if (Input.GetButtonUp("Fire1"))
+				{
+					cooldown = 0f;
+				}
+			}
+			else
+			{
+				if (Input.GetButtonDown("Fire1"))
 				{
 					Fire();
 				}
-			}
-			if (Input.GetButtonUp("Fire1"))
-            {
-				cooldown = 0f;
-            }
-		}
-        else
-        {
-			if (Input.GetButtonDown("Fire1"))
-			{
-				Fire();
 			}
 		}
 	}
@@ -113,6 +117,7 @@ public class PlayerController : MonoBehaviour
 		}*/
 
 		//only control the player if grounded or airControl is turned on
+		
 		if (m_Grounded || m_AirControl)
 		{
 
@@ -163,12 +168,12 @@ public class PlayerController : MonoBehaviour
 				Flip();
 			}
 
-			if (move == 0 && !m_FacingRight && Input.GetAxisRaw("Horizontal") == 1)
+			if (move == 0 && !m_FacingRight && Input.GetAxisRaw("Horizontal") == 1 && !movement.GetDead())
 			{
 				// ... flip the player.
 				Flip();
 			}
-			if (move == 0 && m_FacingRight && Input.GetAxisRaw("Horizontal") == -1)
+			if (move == 0 && m_FacingRight && Input.GetAxisRaw("Horizontal") == -1 && !movement.GetDead())
 			{
 				// ... flip the player.
 				Flip();
@@ -202,6 +207,8 @@ public class PlayerController : MonoBehaviour
 			cooldown = 0.1f;
         } else if (bullet.name == "Laser")
         {
+			mAudioSource.clip = Resources.Load<AudioClip>("laser");
+			mAudioSource.Play();
 			GameObject obj = Instantiate(bullet, mGunPointer);
 			obj.transform.parent = null;
 			cooldown = 0.80f;
@@ -226,10 +233,41 @@ public class PlayerController : MonoBehaviour
 		transform.localScale = theScale;
 	}
 
-	/*
+    /*
 	public void SetCooldown(float cd)
     {
 		cooldown = cd;
     }
 	*/
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+		if (collision.gameObject.CompareTag("IconS"))
+		{
+			ItemGet();
+			bullet = Resources.Load<GameObject>("Spread");
+		}
+		if (collision.gameObject.CompareTag("IconM"))
+		{
+			ItemGet();
+			bullet = Resources.Load<GameObject>("MachineGun");
+		}
+		if (collision.gameObject.CompareTag("IconL"))
+		{
+			ItemGet();
+			bullet = Resources.Load<GameObject>("Laser");
+		}
+		if (collision.gameObject.CompareTag("IconB"))
+		{
+			mAudioSource.clip = Resources.Load<AudioClip>("bomb");
+			mAudioSource.Play();
+			//bullet = Resources.Load<GameObject>("Spread");
+		}
+	}
+
+	private void ItemGet()
+    {
+		mAudioSource.clip = Resources.Load<AudioClip>("item");
+		mAudioSource.Play();
+	}
 }

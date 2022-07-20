@@ -49,6 +49,7 @@ public class BossController : MonoBehaviour
             if (mHealth == 0)
             {
                 StartCoroutine(Dying());
+                StartCoroutine(FadeAudioSource.StartFade(mGameMusic, 0.1f, 1f));
                 mGameMusic.clip = Resources.Load<AudioClip>("BossExplosion");
                 mGameMusic.Play();
             }
@@ -75,6 +76,7 @@ public class BossController : MonoBehaviour
         impulse.GenerateImpulse(5f);
         yield return new WaitForSeconds(10);
         Destroy(gameObject);
+        mGameMusic.Stop();
     }
     
     private void SpawnEnemies()

@@ -9,6 +9,7 @@ public class PlayerMovement : MonoBehaviour
 	public Animator animator;
 	public Rigidbody2D mRigidbody;
 	private Vector3 mVector3 = new Vector3(1f, 0f, 0f);
+	private BoxCollider2D mCollider;
 
 	public float runSpeed = 40f;
 
@@ -25,6 +26,7 @@ public class PlayerMovement : MonoBehaviour
 	private void Start()
     {
 		impulse = transform.GetComponent<CinemachineImpulseSource>();
+		mCollider = transform.GetComponent<BoxCollider2D>();
 	}
 
     void Update()
@@ -177,8 +179,15 @@ public class PlayerMovement : MonoBehaviour
 
 	void FixedUpdate()
 	{
-		controller.Move(horizontalMove * Time.fixedDeltaTime, crouch, jump);
-		jump = false;
+		if (!isDead)
+        {
+			controller.Move(horizontalMove * Time.fixedDeltaTime, crouch, jump);
+			jump = false;
+		}
+		if (isDead)
+        {
+			controller.Move(0f, false, false);
+        }
 	}
 
 
@@ -313,12 +322,20 @@ public class PlayerMovement : MonoBehaviour
 		impulse.GenerateImpulse(5f);
 	}
 
-    /*private void OnCollisionEnter2D(Collision2D collision)
+	public bool GetDead()
+    {
+		return isDead;
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
     {
 		if (collision.gameObject.CompareTag("Hit"))
 		{
+			//mCollider.enabled = false;
+			gameObject.layer = 8;
 			animator.SetBool("IsHit", true);
+			isDead = true;
 			//Destroy(gameObject);
 		}
-	}*/
+	}
 }

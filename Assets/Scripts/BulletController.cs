@@ -101,5 +101,21 @@ public class BulletController : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        if (collision.gameObject.CompareTag("CapsuleM"))
+        {
+            Destroy(gameObject);
+        }
+        if (collision.gameObject.CompareTag("CapsuleL"))
+        {
+            Destroy(gameObject);
+        }
+        if (collision.gameObject.CompareTag("CapsuleS"))
+        {
+            Destroy(gameObject);
+        }
+        if (collision.gameObject.CompareTag("CapsuleB"))
+        {
+            Destroy(gameObject);
+        }
     }
 }

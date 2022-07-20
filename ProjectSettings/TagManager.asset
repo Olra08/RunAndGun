@@ -11,6 +11,14 @@ TagManager:
   - LockR
   - LockL
   - ScreenChange
+  - CapsuleM
+  - CapsuleS
+  - CapsuleL
+  - CapsuleB
+  - IconM
+  - IconS
+  - IconL
+  - IconB
   layers:
   - Default
   - TransparentFX
@@ -20,7 +28,7 @@ TagManager:
   - UI
   - Player
   - Platform
-  - 
+  - Enemy
   - 
   - 
   - 
@@ -53,4 +61,7 @@ TagManager:
     locked: 0
   - name: Player
     uniqueID: 3937953187
+    locked: 0
+  - name: BlackScreen
+    uniqueID: 927975161
     locked: 0
