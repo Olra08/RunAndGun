@@ -5,22 +5,8 @@ using UnityEngine;
 public class Spawner : MonoBehaviour
 {
     public Transform spawn;
-    private Vector3 spawnA;
-    private Vector3 spawnB;
     private float cooldownA;
     private float cooldownB;
-
-    /*
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.gameObject.CompareTag("CapsuleM"))
-        {
-            Instantiate(alien, spawner);
-            Debug.Log("entra");
-            Debug.Log(spawner.position);
-        }
-    }
-    */
 
     private void Update()
     {

@@ -2,6 +2,7 @@ using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -15,24 +16,26 @@ public class PlayerMovement : MonoBehaviour
 	public Transform blackScreen;
 	public Animator black;
 
-	public float runSpeed = 40f;
+	public float runSpeed;
 
 	float horizontalMove = 0f;
 	bool jump = false;
 	bool crouch = false;
 	bool isDead = false;
 
-	private int Lives = 2;
+	private int Lives = 4;
 
 	public GameObject boss;
 	public CinemachineVirtualCamera cinemachine;
 	private CinemachineImpulseSource impulse;
 	public AudioSource mGameMusic;
+	private AudioSource mAudioSource;
 
 	private void Start()
     {
 		impulse = transform.GetComponent<CinemachineImpulseSource>();
 		mCollider = transform.GetComponent<BoxCollider2D>();
+		mAudioSource = GetComponent<AudioSource>();
 	}
 
     void Update()
@@ -55,7 +58,7 @@ public class PlayerMovement : MonoBehaviour
 				animator.SetBool("z_pressed", false);
 				animator.SetBool("Stand_ur", false);
 				animator.SetBool("Stand_dr", false);
-				runSpeed = 40f;
+				runSpeed = 25f;
 			}
 
 			//UR
@@ -278,13 +281,13 @@ public class PlayerMovement : MonoBehaviour
 		{
 			if (transform.localScale.x == 1)
             {
-				mRigidbody.AddForce(new Vector2(-800f, 600f));
+				//mRigidbody.AddForce(new Vector2(-800f, 600f));
 				animator.SetBool("IsHit", true);
 				//Destroy(gameObject);
 			}
 			else if (transform.localScale.x == -1)
             {
-				mRigidbody.AddForce(new Vector2(800f, 600f));
+				//mRigidbody.AddForce(new Vector2(800f, 600f));
 				animator.SetBool("IsHit", true);
 				//Destroy(gameObject);
 			}
@@ -300,6 +303,17 @@ public class PlayerMovement : MonoBehaviour
 			StartCoroutine(BossEntrance());
 			cinemachine.Priority += 1;
 			Invoke(nameof(Shake), 5f);
+		}
+		if (collision.gameObject.CompareTag("StopSpawn"))
+        {
+			lockL.enabled = false;
+			lockR.enabled = false;
+		}
+
+		if (collision.gameObject.CompareTag("SpawnEnemy"))
+		{
+			lockL.enabled = true;
+			lockR.enabled = true;
 		}
 	}
 
@@ -319,6 +333,7 @@ public class PlayerMovement : MonoBehaviour
 	{
 		yield return new WaitForSeconds(5);
 		StartCoroutine(FadeAudioSource.StartFade(mGameMusic, 1f, 0.8f));
+		//mGameMusic.PlayOneShot(Resources.Load<AudioClip>("Boss&Quake"));
 		mGameMusic.clip = Resources.Load<AudioClip>("Boss&Quake");
 		mGameMusic.Play();
 		yield return new WaitForSeconds(5);
@@ -339,6 +354,7 @@ public class PlayerMovement : MonoBehaviour
     {
 		if (collision.gameObject.CompareTag("Hit"))
 		{
+			//isDead = true;
 			if (Lives != 0)
 			{
 				gameObject.layer = 8;
@@ -349,10 +365,12 @@ public class PlayerMovement : MonoBehaviour
 			if (Lives <= 0)
             {
                 StartCoroutine(TimeAfterDying());
-                animator.SetBool("IsHit", true);
+				gameObject.layer = 8;
+				animator.SetBool("IsHit", true);
 				isDead = true;
 				blackScreen.gameObject.SetActive(true);
 				black.SetBool("GameOver", true);
+				StartCoroutine(ChangeScreen());
             }
 		}
 	}
@@ -361,8 +379,10 @@ public class PlayerMovement : MonoBehaviour
     {
 		if (Lives != 0)
         {
+			mAudioSource.clip = Resources.Load<AudioClip>("death");
+			mAudioSource.Play();
 			yield return new WaitForSeconds(2);
-			gameObject.transform.position = new Vector3(transform.position.x, transform.position.y + 5);
+			gameObject.transform.position = new Vector3(transform.position.x, -4.23f);
 			Lives--;
 			animator.SetBool("IsHit", false);
 			isDead = false;
@@ -372,7 +392,23 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
+			mAudioSource.clip = Resources.Load<AudioClip>("death");
+			mAudioSource.Play();
 			yield return new WaitForSeconds(2);
+		}
+	}
+
+	IEnumerator ChangeScreen()
+    {
+		yield return new WaitForSeconds(3);
+		Scene scene = SceneManager.GetActiveScene();
+		if (scene.name == "HardScene")
+        {
+			SceneManager.LoadScene("LoseHScene");
+        }
+        else
+        {
+			SceneManager.LoadScene("LoseScene");
 		}
 	}
 }

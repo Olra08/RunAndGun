@@ -48,6 +48,19 @@ public class PlayerController : MonoBehaviour
 
 		if (OnCrouchEvent == null)
 			OnCrouchEvent = new BoolEvent();
+
+		if (PlayerPrefs.GetInt("checkpoint") == 0)
+        {
+			transform.position = new Vector3(-209.5f, -4.23f);
+		}
+		if (PlayerPrefs.GetInt("checkpoint") == 1)
+        {
+			transform.position = new Vector3(-118.9f, -4.23f);
+        }
+		if (PlayerPrefs.GetInt("checkpoint") == 2)
+        {
+			transform.position = new Vector3(-27.56f, -4.23f);
+		}
 	}
 
     private void Start()
@@ -193,11 +206,12 @@ public class PlayerController : MonoBehaviour
 	{
 		if (bullet.name == "Spread")
         {
-			mAudioSource.clip = Resources.Load<AudioClip>("spread");
-			mAudioSource.Play();
+			/*mAudioSource.clip = Resources.Load<AudioClip>("spread");
+			mAudioSource.Play();*/
+			mAudioSource.PlayOneShot(Resources.Load<AudioClip>("spread"));
 			GameObject obj = Instantiate(bullet, mGunPointer);
 			obj.transform.parent = null;
-			cooldown = 0.20f;
+			cooldown = 0.18f;
 		} else if (bullet.name == "MachineGun")
         {
 			//mAudioSource.clip = Resources.Load<AudioClip>("default");
@@ -205,19 +219,21 @@ public class PlayerController : MonoBehaviour
 			mAudioSource.PlayOneShot(Resources.Load<AudioClip>("default"));
 			GameObject obj = Instantiate(bullet, mGunPointer);
 			obj.transform.parent = null;
-			cooldown = 0.05f;
+			cooldown = 0.06f;
         } else if (bullet.name == "Laser")
         {
 			mAudioSource.clip = Resources.Load<AudioClip>("laser");
 			mAudioSource.Play();
+			//mAudioSource.PlayOneShot(Resources.Load<AudioClip>("laser"));
 			GameObject obj = Instantiate(bullet, mGunPointer);
 			obj.transform.parent = null;
 			cooldown = 0.80f;
 		}
         else
         {
-			mAudioSource.clip = Resources.Load<AudioClip>("default");
-			mAudioSource.Play();
+			/*mAudioSource.clip = Resources.Load<AudioClip>("default");
+			mAudioSource.Play();*/
+			mAudioSource.PlayOneShot(Resources.Load<AudioClip>("default"));
 			GameObject obj = Instantiate(bullet, mGunPointer);
 			obj.transform.parent = null;
 		}
@@ -253,15 +269,17 @@ public class PlayerController : MonoBehaviour
 		}
 		if (collision.gameObject.CompareTag("IconB"))
 		{
-			mAudioSource.clip = Resources.Load<AudioClip>("bomb");
-			mAudioSource.Play();
+			/*mAudioSource.clip = Resources.Load<AudioClip>("bomb");
+			mAudioSource.Play();*/
+			mAudioSource.PlayOneShot(Resources.Load<AudioClip>("bomb"));
 			//bullet = Resources.Load<GameObject>("Spread");
 		}
 	}
 
 	private void ItemGet()
     {
-		mAudioSource.clip = Resources.Load<AudioClip>("item");
-		mAudioSource.Play();
+		/*mAudioSource.clip = Resources.Load<AudioClip>("item");
+		mAudioSource.Play();*/
+		mAudioSource.PlayOneShot(Resources.Load<AudioClip>("item"));
 	}
 }

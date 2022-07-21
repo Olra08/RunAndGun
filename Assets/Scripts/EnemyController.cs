@@ -1,8 +1,9 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class EnemyController : MonoBehaviour
 {
-    private float mHealth = 2f;
+    private float mHealth;
 
     public float aggroRange;
     public float speed;
@@ -18,9 +19,21 @@ public class EnemyController : MonoBehaviour
     private bool isLeft = true;
     private bool walkR = false;
     private bool walkL = false;
+    private float mTimer = 0f;
+    private float timetoDestroy = 10f;
 
     private void Start()
     {
+        Scene scene = SceneManager.GetActiveScene();
+        if (scene.name == "HardScene")
+        {
+            mHealth = 5f;
+            speed = 12.5f;
+        }
+        else
+        {
+            mHealth = 2f;
+        }
         mRigidbody = GetComponent<Rigidbody2D>();
         playerController = GameManager.GetInstance().player;
         playerTransform = GameManager.GetInstance().player.transform;
@@ -43,6 +56,11 @@ public class EnemyController : MonoBehaviour
         if (playerController == null)
         {
             StopChasingHero();
+        }
+        mTimer += Time.deltaTime;
+        if (mTimer > timetoDestroy)
+        {
+            Destroy(gameObject);
         }
     }
 
@@ -80,37 +98,11 @@ public class EnemyController : MonoBehaviour
                 Destroy(gameObject);
             }
         }
-    }
-
-    /*public void IsOnAir()
-    {
-        Transform raycastOrigin = transform.Find("Raycast");
-        RaycastHit2D hit = Physics2D.Raycast(
-            raycastOrigin.position,
-            Vector2.down,
-            raycastDistance
-        );
-        bool onAir = true;
-        if (hit)
+        if (collision.gameObject.CompareTag("BulletOneHit"))
         {
-            Debug.Log("pis¨¦");
-            animator.SetBool("isOnAir", false);
-            onAir = false;
-        }
-        if (!hit && onAir)
-        {
-            animator.SetBool("isOnAir", true);
-        }
-
-    }*/
-
-    /*
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.gameObject.CompareTag("VoidOut"))
-        {
+            GameObject obj = Instantiate(explosion, transform);
+            obj.transform.parent = null;
             Destroy(gameObject);
         }
     }
-    */
 }

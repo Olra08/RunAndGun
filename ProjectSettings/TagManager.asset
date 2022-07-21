@@ -25,6 +25,11 @@ TagManager:
   - SpawnB
   - SpawnBird
   - Black
+  - SpawnEnemy
+  - StopSpawn
+  - BulletOneHit
+  - Checkpoint1
+  - Checkpoint2
   layers:
   - Default
   - TransparentFX

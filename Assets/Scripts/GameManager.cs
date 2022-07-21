@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -22,7 +23,16 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        mGameMusic.clip = Resources.Load<AudioClip>("StageNormal");
-        mGameMusic.Play();
+        Scene scene = SceneManager.GetActiveScene();
+        if (scene.name == "HardScene")
+        {
+            mGameMusic.clip = Resources.Load<AudioClip>("StageHard");
+            mGameMusic.Play();
+        }
+        else
+        {
+            mGameMusic.clip = Resources.Load<AudioClip>("StageNormal");
+            mGameMusic.Play();
+        }
     }
 }
